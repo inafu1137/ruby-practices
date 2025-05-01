@@ -26,20 +26,37 @@ frames[9] << shots[i] if frames[9].sum >= 10 && frames[9].size == 2
 
 ## スコアの計算
 point = 0
-frames.each_with_index do |frame, index|
-  if frame[0] == 10 && index < 9 ## ストライク
-    next_frame = frames[index + 1]
-    if next_frame[0] == 10 && index < 8
-      next_next_frame = frames[index + 2]
-      point += 10 + 10 + next_next_frame[0]
-    else
-      point += 10 + next_frame[0] + next_frame[1]
-    end
-  elsif frame.sum == 10 && frame.size == 2 && index < 9 ## スペア
-    point += 10 + frames[index + 1][0]
-  else ## その他
-    point += frame.sum
+
+frames.each_with_index do |frame, frame_index|
+  sum = frame.sum
+
+  # 最終フレーム（10フレーム目）はそのまま合計
+  if frame_index == 9
+    point += sum
+    next
   end
+
+  # ストライク処理
+  if frame[0] == 10
+    next_frame = frames[frame_index + 1]
+    bonus = if next_frame[0] == 10 && frames[frame_index + 2]
+              frames[frame_index + 2][0]
+            else
+              next_frame[1] || 0
+            end
+
+    point += 10 + next_frame[0] + bonus
+    next
+  end
+
+  # スペア処理
+  if sum == 10
+    point += 10 + frames[frame_index + 1][0]
+    next
+  end
+
+  # 通常フレーム
+  point += frame.sum
 end
 
 puts point
