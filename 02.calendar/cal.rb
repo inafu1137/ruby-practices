@@ -37,7 +37,7 @@ print "   " * first_day.wday
 (first_day.day..last_day.day).each do |day|
   print day.to_s.rjust(2) + " "
   wday = Date.new(year, month, day).wday
-  puts if wday == 6 # 土曜日で改行
+  puts if date.saturday? # 土曜日で改行
 end
 
 puts 
