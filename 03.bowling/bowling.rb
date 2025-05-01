@@ -30,13 +30,10 @@ point = 0
 frames.each_with_index do |frame, frame_index|
   sum = frame.sum
 
-  # 最終フレーム（10フレーム目）はそのまま合計
-  if frame_index == 9
-    point += sum
-    next
-  end
+  point += sum
+  next if frame_index == 9 || sum < 10 # 最終フレーム or 普通のフレームはここで終わる
 
-  # ストライク処理
+  # ストライク or スペア
   if frame[0] == 10
     next_frame = frames[frame_index + 1]
     bonus = if next_frame[0] == 10 && frames[frame_index + 2]
@@ -44,19 +41,10 @@ frames.each_with_index do |frame, frame_index|
             else
               next_frame[1] || 0
             end
-
-    point += 10 + next_frame[0] + bonus
-    next
+    point += next_frame[0] + bonus
+  else
+    point += frames[frame_index + 1][0]
   end
-
-  # スペア処理
-  if sum == 10
-    point += 10 + frames[frame_index + 1][0]
-    next
-  end
-
-  # 通常フレーム
-  point += frame.sum
 end
 
 puts point
