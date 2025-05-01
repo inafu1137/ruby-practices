@@ -34,9 +34,8 @@ puts "日 月 火 水 木 金 土"
 # 空白部分（1日の曜日に応じて）
 print "   " * first_day.wday
 
-(first_day.day..last_day.day).each do |day|
-  print day.to_s.rjust(2) + " "
-  wday = Date.new(year, month, day).wday
+(first_day..last_day).each do |date|
+  print date.day.to_s.rjust(2) + " "
   puts if date.saturday? # 土曜日で改行
 end
 
