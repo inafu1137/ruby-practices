@@ -28,8 +28,7 @@ end
 first_day = Date.new(year, month, 1)
 last_day = Date.new(year, month, -1)
 
-jp_month_names = [nil, "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"]
-puts "#{jp_month_names[month]} #{year}".center(20)
+puts "#{first_day.strftime("%-m月 %Y")}".center(20)
 puts "日 月 火 水 木 金 土"
 
 # 空白部分（1日の曜日に応じて）
