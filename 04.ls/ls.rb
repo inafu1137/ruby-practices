@@ -2,7 +2,6 @@
 # frozen_string_literal: true
 
 MAX_COLUMNS = 3
-MAX_WIDTH = 50
 
 def fetch_entries
   Dir.children('.').sort
@@ -21,7 +20,7 @@ def format_columns(entries, columns = MAX_COLUMNS)
   col_widths = Array.new(columns, 0)
   columns.times do |col|
     col_entries = grid.map { |row| row[col].to_s }
-    col_widths[col] = [col_entries.map(&:length).max || 0, MAX_WIDTH].min
+    col_widths[col] = col_entries.map(&:length).max || 0
   end
 
   grid.each do |row|
