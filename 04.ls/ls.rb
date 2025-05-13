@@ -6,7 +6,6 @@ require 'optparse'
 MAX_COLUMNS = 3
 
 options = {
-  all: false,
   reverse: false
 }
 
@@ -16,9 +15,8 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-def fetch_entries(show_all:, reverse:)
-  entries = Dir.entries('.')
-  entries = entries.reject { |entry| entry.start_with?('.') } unless show_all
+def fetch_entries(reverse:)
+  entries = Dir.children('.').reject { |entry| entry.start_with?('.') }
   entries.sort!
   entries.reverse! if reverse
   entries
@@ -47,5 +45,5 @@ def format_columns(entries, columns = MAX_COLUMNS)
   end
 end
 
-entries = fetch_entries(show_all: options[:all], reverse: options[:reverse])
+entries = fetch_entries(reverse: options[:reverse])
 format_columns(entries)
