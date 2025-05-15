@@ -5,9 +5,9 @@ require_relative './frame'
 
 class Game
   def initialize(score_string)
-    @marks = score_string.split(',')
+    shots = score_string.split(',').map { |mark| Shot.new(mark) }
     @frames = []
-    build_frames
+    build_frames(shots)
   end
 
   def score
@@ -28,8 +28,7 @@ class Game
 
   private
 
-  def build_frames
-    shots = @marks.map { |mark| Shot.new(mark) }
+  def build_frames(shots)
     i = 0
 
     10.times do |frame_index|
