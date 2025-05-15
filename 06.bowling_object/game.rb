@@ -32,18 +32,16 @@ class Game
     i = 0
 
     10.times do |frame_index|
-      frame = Frame.new
-
-      frame.add_shot(shots[i])
-      i += 1
-
-      if !frame.strike? || frame_index == 9
-        frame.add_shot(shots[i])
+      if frame_index == 9
+        frame = Frame.new(shots[i], shots[i + 1], shots[i + 2])
+        i += 3
+      elsif shots[i].strike?
+        frame = Frame.new(shots[i])
         i += 1
+      else
+        frame = Frame.new(shots[i], shots[i + 1])
+        i += 2
       end
-
-      # 10フレーム目の3投目
-      frame.add_shot(shots[i]) if frame_index == 9 && frame.total_score >= 10
 
       @frames << frame
     end

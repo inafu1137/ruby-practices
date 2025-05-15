@@ -3,12 +3,8 @@
 class Frame
   attr_reader :score
 
-  def initialize
-    @shots = []
-  end
-
-  def add_shot(shot)
-    @shots << shot
+  def initialize(*shots)
+    @shots = shots
   end
 
   def strike?
