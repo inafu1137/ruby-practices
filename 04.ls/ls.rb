@@ -6,19 +6,20 @@ require 'optparse'
 MAX_COLUMNS = 3
 
 options = {
-  all: false
+  reverse: false
 }
 
 OptionParser.new do |opts|
-  opts.on('-a') do
-    options[:all] = true
+  opts.on('-r') do
+    options[:reverse] = true
   end
 end.parse!
 
-def fetch_entries(show_all:)
-  entries = Dir.entries('.')
-  entries.reject! { |e| e.start_with?('.') } unless show_all
-  entries.sort
+def fetch_entries(reverse:)
+  entries = Dir.children('.').reject { |entry| entry.start_with?('.') }
+  entries.sort!
+  entries.reverse! if reverse
+  entries
 end
 
 def format_columns(entries, columns = MAX_COLUMNS)
@@ -44,5 +45,5 @@ def format_columns(entries, columns = MAX_COLUMNS)
   end
 end
 
-entries = fetch_entries(show_all: options[:all])
+entries = fetch_entries(reverse: options[:reverse])
 format_columns(entries)
