@@ -2,24 +2,55 @@
 # frozen_string_literal: true
 
 require 'optparse'
+require 'etc'
 
 MAX_COLUMNS = 3
 
 options = {
-  reverse: false
+  long: false
 }
 
 OptionParser.new do |opts|
-  opts.on('-r') do
-    options[:reverse] = true
+  opts.on('-l') do
+    options[:long] = true
   end
 end.parse!
 
-def fetch_entries(reverse:)
-  entries = Dir.children('.').reject { |entry| entry.start_with?('.') }
-  entries.sort!
-  entries.reverse! if reverse
-  entries
+def fetch_entries
+  Dir.entries('.').reject { |entry| entry.start_with?('.') }.sort
+end
+
+def file_mode_string(mode)
+  type_flag = case mode & 0o170000
+              when 0o040000 then 'd'
+              when 0o100000 then '-'
+              when 0o120000 then 'l'
+              else '?'
+              end
+
+  perms = ''
+  3.times do |i|
+    perms += (mode & (0o400 >> (i * 3))).zero? ? '-' : 'r'
+    perms += (mode & (0o200 >> (i * 3))).zero? ? '-' : 'w'
+    perms += (mode & (0o100 >> (i * 3))).zero? ? '-' : 'x'
+  end
+
+  type_flag + perms
+end
+
+def format_long_columns(entries)
+  entries.each do |entry|
+    path = File.join('.', entry)
+    stat = File.lstat(path)
+
+    mode = file_mode_string(stat.mode)
+    nlink = stat.nlink
+    user = Etc.getpwuid(stat.uid).name
+    group = Etc.getgrgid(stat.gid).name
+    size = stat.size
+    mtime = stat.mtime.strftime('%b %d %H:%M')
+    puts "#{mode} #{nlink} #{user} #{group} #{size.to_s.rjust(6)} #{mtime} #{entry}"
+  end
 end
 
 def format_columns(entries, columns = MAX_COLUMNS)
@@ -45,5 +76,10 @@ def format_columns(entries, columns = MAX_COLUMNS)
   end
 end
 
-entries = fetch_entries(reverse: options[:reverse])
-format_columns(entries)
+entries = fetch_entries
+
+if options[:long]
+  format_long_columns(entries)
+else
+  format_columns(entries)
+end
