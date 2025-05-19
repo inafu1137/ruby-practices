@@ -7,17 +7,29 @@ require 'etc'
 MAX_COLUMNS = 3
 
 options = {
+  all: false,
+  reverse: false,
   long: false
 }
 
 OptionParser.new do |opts|
+  opts.on('-a') do
+    options[:all] = true
+  end
+  opts.on('-r') do
+    options[:reverse] = true
+  end
   opts.on('-l') do
     options[:long] = true
   end
 end.parse!
 
-def fetch_entries
-  Dir.entries('.').reject { |entry| entry.start_with?('.') }.sort
+def fetch_entries(all: false, reverse: false)
+  entries = Dir.entries('.')
+  entries.reject! { |entry| entry.start_with?('.') } unless all
+  entries.sort!
+  entries.reverse! if reverse
+  entries
 end
 
 def file_mode_string(mode)
@@ -82,7 +94,7 @@ def format_columns(entries, columns = MAX_COLUMNS)
   end
 end
 
-entries = fetch_entries
+entries = fetch_entries(all: options[:all], reverse: options[:reverse])
 
 if options[:long]
   format_long_columns(entries)
