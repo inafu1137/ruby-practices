@@ -39,6 +39,12 @@ def file_mode_string(mode)
 end
 
 def format_long_columns(entries)
+  total_blocks = entries.sum do |entry|
+    path = File.join('.', entry)
+    File.lstat(path).blocks
+  end
+  puts "合計 #{total_blocks}"
+
   entries.each do |entry|
     path = File.join('.', entry)
     stat = File.lstat(path)
