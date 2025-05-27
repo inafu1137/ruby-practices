@@ -22,7 +22,7 @@ end.parse!
 entries = EntryFetcher.new(all: options[:all], reverse: options[:reverse]).fetch
 
 if options[:long]
-  LongListFormatter.new(entries).display
+  LongListFormatter.new(entries)
 else
-  ColumnListFormatter.new(entries).display
-end
+  ColumnListFormatter.new(entries)
+end.display
