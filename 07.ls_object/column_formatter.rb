@@ -25,4 +25,14 @@ class ColumnFormatter
       end
     end
   end
+
+  def display
+    grid = format
+    widths = col_widths(grid)
+    grid.each do |row|
+      puts row.each_with_index.map { |item, i|
+        item.to_s.ljust(widths[i])
+      }.join(' ')
+    end
+  end
 end

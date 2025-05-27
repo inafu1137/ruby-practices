@@ -5,7 +5,6 @@ require 'optparse'
 require 'etc'
 require_relative 'entry_fetcher'
 require_relative 'column_formatter'
-require_relative 'ls_displayer'
 require_relative 'long_column_formatter'
 
 options = {
@@ -24,12 +23,7 @@ fetcher = EntryFetcher.new(all: options[:all], reverse: options[:reverse])
 entries = fetcher.fetch
 
 if options[:long]
-  formatter = LongColumnFormatter.new(entries)
-  grid = formatter.format
-  LsDisplayer.new(grid, []).display
+  LongColumnFormatter.new(entries).display
 else
-  formatter = ColumnFormatter.new(entries)
-  grid = formatter.format
-  widths = formatter.col_widths(grid)
-  LsDisplayer.new(grid, widths).display
+  ColumnFormatter.new(entries).display
 end
