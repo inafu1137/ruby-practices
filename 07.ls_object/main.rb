@@ -19,8 +19,7 @@ OptionParser.new do |opts|
   opts.on('-l') { options[:long] = true }
 end.parse!
 
-fetcher = EntryFetcher.new(all: options[:all], reverse: options[:reverse])
-entries = fetcher.fetch
+entries = EntryFetcher.new(all: options[:all], reverse: options[:reverse]).fetch
 
 if options[:long]
   LongColumnFormatter.new(entries).display
