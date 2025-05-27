@@ -4,8 +4,8 @@
 require 'optparse'
 require 'etc'
 require_relative 'entry_fetcher'
-require_relative 'column_formatter'
-require_relative 'long_column_formatter'
+require_relative 'column_list_formatter'
+require_relative 'long_list_formatter'
 
 options = {
   all: false,
@@ -22,7 +22,7 @@ end.parse!
 entries = EntryFetcher.new(all: options[:all], reverse: options[:reverse]).fetch
 
 if options[:long]
-  LongColumnFormatter.new(entries).display
+  LongListFormatter.new(entries).display
 else
-  ColumnFormatter.new(entries).display
+  ColumnListFormatter.new(entries).display
 end

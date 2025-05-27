@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class LongColumnFormatter
+class LongListFormatter
   def initialize(entries)
     @entries = entries
   end

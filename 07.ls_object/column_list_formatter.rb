@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ColumnFormatter
+class ColumnListFormatter
   def initialize(entries, columns = 3)
     @entries = entries
     @columns = columns
